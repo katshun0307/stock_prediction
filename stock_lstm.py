@@ -1,3 +1,9 @@
+""" stock_lstm.py : learn stock prices of companies in nyse with lstm model """
+
+__author__ = "Shuntaro Katsuda"
+
+# -*- coding: utf-8 -*-
+
 import numpy as np
 import keras
 import matplotlib.pyplot as plt
@@ -14,8 +20,10 @@ sys.path.append(os.pardir)
 from sklearn.utils import shuffle
 
 
+
+
 '''
-データの取得
+get learning data
 '''
 # problem = np.load("apple_stocks.npy")
 problem = np.load('nyse_stocks.npy')
@@ -41,7 +49,7 @@ X_train, X_validation, Y_train, Y_validation = \
 
 
 '''
-モデル設定
+build model
 '''
 n_in = len(X[0][0])  # 1
 n_hidden = 30
@@ -51,34 +59,30 @@ n_out = len(Y[0])  # 1
 def weight_variable(shape, name=None):
     return np.random.normal(scale=.01, size=shape)
 
+# define model
+early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1)
 
+model = Sequential()
+model.add(LSTM(n_hidden,
+               kernel_initializer=weight_variable,
+               input_shape=(maxlen, n_in)))
+model.add(Dense(n_out, kernel_initializer=weight_variable))
+model.add(Activation('linear'))
+
+# load weights if exists
 try:
-    model = keras.models.load_model('./stock_lstm.h5')
-    print("loaded model")
+    model.load_weights('lstm_weights.h5')
+    print("loaded weights")
 except Exception as e:
-    print(e)
-    print("model did not exist.\nmaking model")
-    early_stopping = EarlyStopping(monitor='val_loss', patience=10, verbose=1)
+    print("could not load model")
 
-    model = Sequential()
-    model.add(LSTM(n_hidden,
-                   kernel_initializer=weight_variable,
-                   input_shape=(maxlen, n_in)))
-    model.add(Dense(n_out, kernel_initializer=weight_variable))
-    model.add(Activation('linear'))
-
-    try:
-        model.load_weights('lstm_weights.h5')
-        print("loaded weights")
-    except Exception as e:
-        print("could not load model")
-
-    optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
-    model.compile(loss='mean_squared_error',
-                  optimizer=optimizer)
+# compile model
+optimizer = Adam(lr=0.001, beta_1=0.9, beta_2=0.999)
+model.compile(loss='mean_squared_error',
+              optimizer=optimizer)
 
 '''
-モデル学習
+optimize model
 '''
 epochs = 5
 batch_size = 10
@@ -100,7 +104,7 @@ model.save_weights('lstm_weights.h5')
 
 
 '''
-出力を用いて予測
+predict
 '''
 truncate = maxlen
 Z = X[:1]  # 元データの最初の一部だけ切り出し
@@ -124,11 +128,12 @@ original = np.array(original).transpose()
 predicted = np.array(predicted).transpose()
 problem = np.array(problem).transpose()
 
+
 '''
-グラフで可視化
+visualize with graph
 '''
 
-# write graph of first company
+# write graph of first brand
 plt.rc('font', family='serif')
 plt.figure()
 plt.ylim([0, 200])
