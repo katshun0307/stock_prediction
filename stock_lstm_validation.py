@@ -1,8 +1,11 @@
-""" stock_lstm.py : learn stock prices of companies in nyse with lstm model """
+""" stock_prediction / stock_lstm_validation.py :  """
 
+"""
+
+"""
 __author__ = "Shuntaro Katsuda"
 
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 
 import numpy as np
 import keras
@@ -22,12 +25,13 @@ sys.path.append(os.pardir)
 from sklearn.utils import shuffle
 
 """ ========== """
-LEARNING_DATA = "training_nyse_stocks.npy"
+LEARNING_DATA = "validation_nyse_stocks.npy"
 WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
-EPOCHS = 50
-MAXLEN = 50
-BATCH_SIZE = 10
+EPOCHS = 0  # do not change
+MAXLEN = 150 # no meaning
+BATCH_SIZE = 10 # no meaning
 """ ========== """
+
 
 
 '''
@@ -39,9 +43,6 @@ problem = np.load(LEARNING_DATA)
 # normalize data
 problem = preprocessing.scale(problem)
 print("normalized!")
-
-print(len(problem[0]))
-
 
 length_of_sequences = len(problem) - 1
 
@@ -196,4 +197,6 @@ plt.plot(predicted_)
 plt.plot(problem_)
 plt.plot(original_)
 plt.show()
+
+
 
