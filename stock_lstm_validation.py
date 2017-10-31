@@ -28,8 +28,8 @@ from sklearn.utils import shuffle
 LEARNING_DATA = "validation_nyse_stocks.npy"
 WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
 EPOCHS = 0  # do not change
-MAXLEN = 150 # no meaning
-BATCH_SIZE = 10 # no meaning
+MAXLEN = 200 # same as stock_lstm.py
+BATCH_SIZE = 10 # no needed
 """ ========== """
 
 

@@ -24,10 +24,11 @@ from sklearn.utils import shuffle
 """ ========== """
 LEARNING_DATA = "training_nyse_stocks.npy"
 WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
-EPOCHS = 50
-MAXLEN = 50
+EPOCHS = 0
+MAXLEN = 200
 BATCH_SIZE = 10
 """ ========== """
+
 
 
 '''
@@ -197,3 +198,4 @@ plt.plot(problem_)
 plt.plot(original_)
 plt.show()
 
+print("finished")
