@@ -90,7 +90,7 @@ validation_nyse_open = np.array(validation_nyse_open)
 
 
 np.save("training_nyse_stocks.npy", training_nyse_open)
-np.save("validation_nyse_open.npy", validation_nyse_open)
+np.save("validation_nyse_stocks.npy", validation_nyse_open)
 
 print("save complete")
 
