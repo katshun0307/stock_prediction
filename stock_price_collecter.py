@@ -4,10 +4,10 @@ import datetime
 import numpy as np
 
 
-training_start_time = datetime.datetime(2013, 1, 1)
-training_end_time = datetime.datetime(2015, 1, 1)
+training_start_time = datetime.datetime(2012, 1, 1)
+training_end_time = datetime.datetime(2016, 1, 1)
 validation_start_time = training_end_time
-validation_end_time = datetime.datetime.today()
+validation_end_time = datetime.datetime(2017, 6, 30)
 COMPANIES = 20
 
 

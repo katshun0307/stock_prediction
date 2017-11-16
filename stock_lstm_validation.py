@@ -26,12 +26,12 @@ from sklearn.utils import shuffle
 
 """ ========== """
 LEARNING_DATA = "validation_nyse_stocks.npy"
-WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
+INPUT_WEIGHTS_FILE = "lstm_weights_normalized.h5"
+# INPUT_WEIGHTS_FILE = "weights/weights_150.h5"
 EPOCHS = 0  # do not change
 MAXLEN = 200 # same as stock_lstm.py
 BATCH_SIZE = 10 # no needed
 """ ========== """
-
 
 
 '''
@@ -98,7 +98,7 @@ model.add(Activation('linear'))
 
 # load weights if exists
 try:
-    model.load_weights(WEIGHTS_FILE)
+    model.load_weights(INPUT_WEIGHTS_FILE)
     print("loaded weights")
 except Exception as e:
     print("could not load model")
@@ -122,12 +122,6 @@ model.fit(X_train, Y_train,
           callbacks=[early_stopping])
 
 
-print("finished learning model...")
-model.save('lstm_model.h5')
-
-print("saving weights...")
-model.save_weights(WEIGHTS_FILE)
-print("saved weights")
 
 
 # print("saving model")
@@ -178,25 +172,25 @@ visualize with graph
 
 # build new array for graph
 #predicted_ = predicted[50:]
-predicted_ = []
-original_ = []
-problem_ = []
-for prices in predicted:
-    try:
-        predicted_.append(prices[0])
-    except Exception as e:
-        predicted_.append(None)
+for i in range(20):
+    predicted_ = []
+    original_ = []
+    problem_ = []
+    for prices in predicted:
+        try:
+            predicted_.append(prices[i]) #
+        except Exception as e:
+            predicted_.append(None)
 
-for prices in original:
-    original_.append(prices[0])
+    for prices in original:
+        original_.append(prices[i]) #
 
-for prices in problem:
-    problem_.append(prices[0])
+    for prices in problem:
+        problem_.append(prices[i]) #
 
-plt.plot(predicted_)
-plt.plot(problem_)
-plt.plot(original_)
-plt.show()
-
-
-
+    plt.plot(predicted_)
+    plt.plot(problem_)
+    plt.plot(original_)
+    plt.savefig("images_old/company_" + str(i) + ".png")
+    print("saved" + str(i) + ".png")
+    plt.clf()

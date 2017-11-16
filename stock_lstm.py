@@ -23,8 +23,14 @@ from sklearn.utils import shuffle
 
 """ ========== """
 LEARNING_DATA = "training_nyse_stocks.npy"
-WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
-EPOCHS = 0
+# INPUT_WEIGHTS_FILE = "lstm_weights_normalized_new.h5"
+INPUT_WEIGHTS_FILE = "weights/weights_100.h5"
+OUTPUT_WEIGHTS_FILE = "weights/weights_150.h5"
+# LEARNING_DATA = "data/training_tech_corps.npy"
+# WEIGHTS_FILE = "data/weights_tech_corps.npy"
+# NUM_OF_CORPS = 161
+NUM_OF_CORPS = 20
+EPOCHS = 50
 MAXLEN = 200
 BATCH_SIZE = 10
 """ ========== """
@@ -36,9 +42,12 @@ get learning data
 '''
 # problem = np.load("apple_stocks.npy")
 problem = np.load(LEARNING_DATA)
+print(problem[0].T.tolist())
+
 
 # normalize data
 problem = preprocessing.scale(problem)
+# problem = preprocessing.RobustScaler().fit(problem)
 print("normalized!")
 
 print(len(problem[0]))
@@ -55,8 +64,8 @@ for i in range(0, length_of_sequences - maxlen + 1):
     data.append(problem[i: i + maxlen])
     target.append(problem[i + maxlen])
 
-X = np.array(data).reshape(len(data), maxlen, 20)
-Y = np.array(target).reshape(len(data), 20)
+X = np.array(data).reshape(len(data), maxlen, NUM_OF_CORPS)
+Y = np.array(target).reshape(len(data), NUM_OF_CORPS)
 
 N_train = int(len(data) * 0.9)
 N_validation = len(data) - N_train
@@ -98,7 +107,7 @@ model.add(Activation('linear'))
 
 # load weights if exists
 try:
-    model.load_weights(WEIGHTS_FILE)
+    model.load_weights(INPUT_WEIGHTS_FILE)
     print("loaded weights")
 except Exception as e:
     print("could not load model")
@@ -126,7 +135,7 @@ print("finished learning model...")
 model.save('lstm_model.h5')
 
 print("saving weights...")
-model.save_weights(WEIGHTS_FILE)
+model.save_weights(OUTPUT_WEIGHTS_FILE)
 print("saved weights")
 
 
