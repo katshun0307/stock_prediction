@@ -19,19 +19,17 @@ access_token_secret = os.environ.get('ACCESS_TOKEN_SECRET')
 
 def getTimeline():
     """
-    collect trump`s tweets
-    :return: user's tweets in list
+    Return time of trumps tweets in array form.
     """
+    output = []
     user_timeline_endpoint = "https://api.twitter.com/1.1/statuses/user_timeline.json"
     timeline_endpoint = "https://api.twitter.com/1.1/statuses/home_timeline.json"
     params = {'screen_name':'@realDonaldTrump', 'exclude_replies':True, 'include_rts': False}
     auth = OAuth1(consumer_key, consumer_secret, access_token, access_token_secret)
     response = requests.get(user_timeline_endpoint, params=params, auth=auth)
-    return response.text
+    response = json.loads(response.text)
+    for tweet in response:
+        output.append(tweet['created_at'])
+    return output
 
-
-tweets = getTimeline()
-tweets = json.loads(tweets)
-
-#print(tweets[0]['text'])
-
+print(getTimeline())
